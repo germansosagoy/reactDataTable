@@ -6,27 +6,29 @@ import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const tablaCampeones =[
-  { año:"2000", campeon:"Real Madrid CF", subcampeon:"Valencia CF"},
-  {año:"2001", campeon:"FC Bayern Munich", subcampeon:"Valencia CF"},
-  { año:"2002", campeon:"Real Madrid CF", subcampeon:"Bayer 04 Leverkusen"},
-  { año:"2003", campeon:"Milan AC", subcampeon:"Juventus FC"},
-  { año:"2004", campeon:"FC Pórto", subcampeon:"AS Monaco"},
-  { año:"2005", campeon:"Liverpool FC", subcampeon:"AC Milan"},
-  { año:"2006", campeon:"FC Barcelona", subcampeon:"Arsenal FC"},
-  { año:"2007", campeon:"Milan AC", subcampeon:"Liverpool FC"},
-  { año:"2008", campeon:"Manchester United FC", subcampeon:"Chelsea FC"},
-  { año:"2009", campeon:"FC Barcelona", subcampeon:"Manchester United FC"},
-  { año:"2010", campeon:"FC Internazionale", subcampeon:"FC Bayern Munich"},
-  { año:"2011", campeon:"FC Barcelona", subcampeon:"Manchester United FC"},
-  { año:"2012", campeon:"Chelsea FC", subcampeon:"FC Bayern Munich"},
-  { año:"2013", campeon:"FC Bayern Munich", subcampeon:"BV Borussia Dortmund"},
-  { año:"2014", campeon:"Real Madrid CF", subcampeon:"Atletico de Madrid"},
-  { año:"2015", campeon:"FC Barcelona", subcampeon:"Juventus FC"},
-  { año:"2016", campeon:"Real Madrid CF", subcampeon:"Atletico de Madrid"},
-  { año:"2017", campeon:"Real Madrid CF", subcampeon:"Juventus FC"},
-  {año:"2018", campeon:"Real Madrid CF", subcampeon:"Liverpool FC"},
-  { año:"2019", campeon:"Liverpool FC", subcampeon:"Tottenham Hotspur FC"},
+// Lista de peliculas
+const tablaOscars =[
+  { año:"2000", pelicula: "Belleza americana", directores: "Sam Mendes"},
+  { año:"2001", pelicula: "Gladiador", directores: "Ridley Scott"},
+  { año:"2002", pelicula: "Una mente brillante", directores: "Ron Howard"},
+  { año:"2003", pelicula: "Chicago", directores: "Rob Marshall"},
+  { año:"2004", pelicula: "El señor de los anillos: El retorno del rey", directores: "Peter Jackson"},
+  { año:"2005", pelicula: "Million Dollar Baby", directores: "Clint Eastwood"},
+  { año:"2006", pelicula: "Vidas cruzadas", directores: "Paul Haggis"},
+  { año:"2007", pelicula: "Los infiltrados", directores: "Martin Scorsese" },
+  { año:"2008", pelicula: "Sin lugar para los débiles", directores: "Ethan Coen"},
+  { año:"2009", pelicula: "Slumdog millionaire - ¿Quién quiere ser millonario?", directores: "Danny Boyle"},
+  { año:"2010", pelicula: "Vivir al límite", directores: "Kathryn Bigelow"},
+  { año:"2011", pelicula: "El discurso del Rey", directores: "Tom Hooper"},
+  { año:"2012", pelicula: "El artista", directores: "Michel Hazanavicius"},
+  { año:"2013", pelicula: "Argo", directores: "Ben Affleck"},
+  { año:"2014", pelicula: "12 años de esclavitud", directores: "Steve McQueen"},
+  { año:"2015", pelicula: "Birdman (o la inesperada virtud de la ignorancia)", directores: "Alejandro González Iñárritu"},
+  { año:"2016", pelicula: "En primera plana", directores: "Thomas McCarthy"},
+  { año:"2017", pelicula: "Luz de luna", directores: "J	Barry Jenkins"},
+  { año:"2018", pelicula: "La forma del agua", directores: "Guillermo del Toro"},
+  { año:"2019", pelicula: "Green Book: Una amistad sin fronteras", directores: "Peter Farrelly"},
+  { año:"2020", pelicula: "Parasite", directores: "Bong Joon-ho"},
 ];
 
 
@@ -38,9 +40,9 @@ const paginacionOpciones={
 }
 
 class App extends Component {
-  state={
+    state={
     busqueda: '',
-    campeones: [],
+    pelicula: [],
     columnas:[]
   }
 
@@ -64,14 +66,14 @@ class App extends Component {
         sortable: true
       },
       {
-        name: 'Campeón',
-        selector: 'campeon',
+        name: 'Pelicula',
+        selector: 'pelicula',
         sortable: true,
         grow: 3
       },
       {
-        name: 'Subcampeón',
-        selector: 'subcampeon',
+        name: 'Directores',
+        selector: 'directores',
         sortable: true,
         right:true
       }
@@ -81,20 +83,20 @@ class App extends Component {
   }
 
   filtrarElementos=()=>{
-    var search=tablaCampeones.filter(item=>{
+    var search=tablaOscars.filter(item=>{
       if(item.año.toString().includes(this.state.busqueda) ||
-      item.campeon.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(this.state.busqueda) ||
-      item.subcampeon.toLowerCase().includes(this.state.busqueda)
+      item.pelicula.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,"").includes(this.state.busqueda) ||
+      item.directores.toLowerCase().includes(this.state.busqueda)
       ){
         return item;
       }
     });
-    this.setState({campeones: search});
+    this.setState({pelicula: search});
   }
 
   crearIndex=()=>{
     var contador=1;
-    tablaCampeones.map(elemento=>{
+    tablaOscars.map(elemento=>{
       elemento["id"]=contador;
       contador++;
     })
@@ -103,7 +105,7 @@ class App extends Component {
   componentDidMount(){
     this.crearIndex();
     this.asignarColumnas();
-this.setState({campeones: tablaCampeones});
+this.setState({pelicula: tablaOscars});
   }
   
 render(){
@@ -118,15 +120,15 @@ render(){
               value={this.state.busqueda}
               onChange={this.onChange}
             />
-            <button type="button" className="btnBuscar" /*onClick={onClear}*/>
+            <button type="button" className="btnBuscar" >
               {" "}
               <FontAwesomeIcon icon={faSearch} />
             </button>
           </div>
       <DataTable 
       columns={this.state.columnas}
-      data={this.state.campeones}
-      title="Campeones UCL 2000-2019"
+      data={this.state.pelicula}
+      className="title" title = "Ganadores de los Premios Oscar 2000 - 2020 🎬" 
       pagination
       paginationComponentOptions={paginacionOpciones}
       fixedHeader
