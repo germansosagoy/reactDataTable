@@ -1,1 +1,0 @@
-# reactDataTable hecho con Bootstrap
